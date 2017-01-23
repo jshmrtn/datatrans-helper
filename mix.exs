@@ -35,6 +35,6 @@ defmodule DatatransHelper.Mixfile do
      {:excoveralls, "~> 0.4", only: [:dev, :test]},
      {:dialyxir, "~> 0.4", only: [:dev], runtime: false},
      {:credo, "~> 0.5", only: [:dev, :test]},
-     {:quixir, "~> 0.9", only: :test}]
+     {:quixir, "~> 0.9", only: [:dev, :test]}]
   end
 end
