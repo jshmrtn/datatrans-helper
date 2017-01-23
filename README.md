@@ -2,7 +2,7 @@
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/jshmrtn/datatrans-helper/master/LICENSE)
 [![Build Status](https://travis-ci.org/jshmrtn/datatrans-helper.svg?branch=master)](https://travis-ci.org/jshmrtn/datatrans-helper)
-[![Hex.pm Version](https://img.shields.io/hexpm/v/datatrans-helper.svg?style=flat)](https://hex.pm/packages/datatrans-helper)
+[![Hex.pm Version](https://img.shields.io/hexpm/v/datatrans-helper.svg?style=flat)](https://hex.pm/packages/datatrans_helper)
 [![InchCI](https://inch-ci.org/github/jshmrtn/datatrans-helper.svg?branch=master)](https://inch-ci.org/github/jshmrtn/datatrans-helper)
 [![Coverage Status](https://coveralls.io/repos/github/jshmrtn/datatrans-helper/badge.svg?branch=master)](https://coveralls.io/github/jshmrtn/datatrans-helper?branch=master)
 
