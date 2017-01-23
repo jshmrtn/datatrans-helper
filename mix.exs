@@ -7,6 +7,7 @@ defmodule DatatransHelper.Mixfile do
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
+     description: description(),
      deps: deps(),
      test_coverage: [tool: ExCoveralls]]
   end
@@ -18,6 +19,13 @@ defmodule DatatransHelper.Mixfile do
     # Specify extra applications you'll use from Erlang/Elixir
     [extra_applications: [:logger]]
   end
+
+  defp description do
+    """
+    Small Helper Function to sign Datatrans Request Parameters.
+    """
+  end
+
 
   # Dependencies can be Hex packages:
   #
@@ -36,5 +44,14 @@ defmodule DatatransHelper.Mixfile do
      {:dialyxir, "~> 0.4", only: [:dev], runtime: false},
      {:credo, "~> 0.5", only: [:dev, :test]},
      {:quixir, "~> 0.9", only: [:dev, :test]}]
+  end
+
+  defp package do
+    [# These are the default files included in the package
+     name: :datatrans_helper,
+     files: ["lib", "mix.exs", "README*", "LICENSE*"],
+     maintainers: ["Jonatan Männchen"],
+     licenses: ["MIT"],
+     links: %{"GitHub" => "https://github.com/jshmrtn/datatrans-helper"}]
   end
 end
