@@ -12,11 +12,11 @@ defmodule DatatransHelper do
   ### Examples
 
       iex> Application.put_env(:datatrans_helper, :merchant_id, "73452")
-      iex> Application.put_env(:datatrans_helper, :sign1_hmac_key, "your_key")
+      iex> Application.put_env(:datatrans_helper, :sign1_hmac_key, "16ee1f9c0204842aed558fd57fd38503421dd6876269ad82d490ae5a7d5454d2dd936102190e86d06412ce94631fc96b6215da5fe0a5d1687dba5c5fa351e0fb")
       iex> DatatransHelper.generate_payment_info(7_20, "CHF", "a5e511e9-7334-44c2-be21-cef964091739")
       %{amount: 7_20, currency: "CHF", merchant_id: "73452",
        refno: "a5e511e9-7334-44c2-be21-cef964091739",
-       sign: "2A28243478E60BF7CC5D418D99A00287173DA3963AA5B3459830DBDDB86EB648"}
+       sign: "1dbf3321ef16b02a638762bc30aa9811ce696656ea49e362a452166020c976c5"}
 
   """
   @spec generate_payment_info(non_neg_integer, String.t, String.t) :: datatrans_payment_request
@@ -38,11 +38,11 @@ defmodule DatatransHelper do
     ### Examples
 
         iex> Application.put_env(:datatrans_helper, :merchant_id, "73452")
-        iex> Application.put_env(:datatrans_helper, :sign1_hmac_key, "your_key")
+        iex> Application.put_env(:datatrans_helper, :sign1_hmac_key, "16ee1f9c0204842aed558fd57fd38503421dd6876269ad82d490ae5a7d5454d2dd936102190e86d06412ce94631fc96b6215da5fe0a5d1687dba5c5fa351e0fb")
         iex> DatatransHelper.generate_payment_info(Money.new(7_20, :CHF), "a5e511e9-7334-44c2-be21-cef964091739")
         %{amount: 7_20, currency: "CHF", merchant_id: "73452",
          refno: "a5e511e9-7334-44c2-be21-cef964091739",
-         sign: "2A28243478E60BF7CC5D418D99A00287173DA3963AA5B3459830DBDDB86EB648"}
+         sign: "1dbf3321ef16b02a638762bc30aa9811ce696656ea49e362a452166020c976c5"}
 
     """
     @spec generate_payment_info(Money.t, String.t) :: datatrans_payment_request
@@ -59,18 +59,20 @@ defmodule DatatransHelper do
   @spec sign(%{merchant_id: String.t, amount: non_neg_integer, currency: String.t, refno: String.t})
     :: %{merchant_id: String.t, amount: float, currency: String.t, refno: String.t, sign: String.t}
   defp sign(payment_information) do
-    sign = Base.encode16 :crypto.hmac(:sha256, get_sign1_hmac_key(),
+    sign = :crypto.hmac(:sha256, get_sign1_hmac_key(),
       payment_information[:merchant_id] <>
       Integer.to_string(payment_information[:amount]) <>
       payment_information[:currency] <>
       payment_information[:refno]
     )
+    |> Base.encode16
+    |> String.downcase
 
     Map.put(payment_information, :sign, sign)
   end
 
   @spec get_sign1_hmac_key() :: String.t
-  defp get_sign1_hmac_key, do: ConfigExt.fetch_env!(:datatrans_helper, :sign1_hmac_key)
+  defp get_sign1_hmac_key, do: ConfigExt.fetch_env!(:datatrans_helper, :sign1_hmac_key) |> String.upcase |> Base.decode16!
 
   @spec get_merchant_id() :: String.t | integer
   defp get_merchant_id do

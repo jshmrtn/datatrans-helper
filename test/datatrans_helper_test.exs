@@ -10,7 +10,7 @@ defmodule DatatransHelperTest do
   @property_amount positive_int()
   @property_currency string(min: 3, max: 3, chars: :ascii)
   @property_reference string()
-  @property_sign1_hmac_key string(chars: ?A..?Z)
+  @property_sign1_hmac_key string(chars: :digits, min: 128, max: 128)
 
   describe "generate_payment_info/3" do
     test "map has same output as config" do
@@ -26,16 +26,20 @@ defmodule DatatransHelperTest do
 
         payment_info = generate_payment_info(amount, currency, reference)
 
-        assert payment_info[:merchant_id] == if is_integer(merchant_id), do: Integer.to_string(merchant_id), else: merchant_id
-        assert payment_info[:amount] == amount
-        assert payment_info[:currency] == currency
-        assert payment_info[:refno] == reference
-        assert payment_info[:sign] == :crypto.hmac(:sha256, sign1_hmac_key,
+        signature = :crypto.hmac(:sha256, Base.decode16!(sign1_hmac_key),
           (if is_integer(merchant_id), do: Integer.to_string(merchant_id), else: merchant_id) <>
           Integer.to_string(amount) <>
           currency <>
           reference
-        ) |> Base.encode16
+        )
+        |> Base.encode16
+        |> String.downcase
+
+        assert payment_info[:merchant_id] == if is_integer(merchant_id), do: Integer.to_string(merchant_id), else: merchant_id
+        assert payment_info[:amount] == amount
+        assert payment_info[:currency] == currency
+        assert payment_info[:refno] == reference
+        assert payment_info[:sign] == signature
       end
     end
   end
@@ -54,16 +58,20 @@ defmodule DatatransHelperTest do
 
         payment_info = generate_payment_info(%Money{amount: amount, currency: String.to_atom(currency)}, reference)
 
-        assert payment_info[:merchant_id] == if is_integer(merchant_id), do: Integer.to_string(merchant_id), else: merchant_id
-        assert payment_info[:amount] == amount
-        assert payment_info[:currency] == currency
-        assert payment_info[:refno] == reference
-        assert payment_info[:sign] == :crypto.hmac(:sha256, sign1_hmac_key,
+        signature = :crypto.hmac(:sha256, Base.decode16!(sign1_hmac_key),
           (if is_integer(merchant_id), do: Integer.to_string(merchant_id), else: merchant_id) <>
           Integer.to_string(amount) <>
           currency <>
           reference
-        ) |> Base.encode16
+        )
+        |> Base.encode16
+        |> String.downcase
+
+        assert payment_info[:merchant_id] == if is_integer(merchant_id), do: Integer.to_string(merchant_id), else: merchant_id
+        assert payment_info[:amount] == amount
+        assert payment_info[:currency] == currency
+        assert payment_info[:refno] == reference
+        assert payment_info[:sign] == signature
       end
     end
   end
