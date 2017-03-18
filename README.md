@@ -15,7 +15,7 @@ by adding `datatrans_helper` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:datatrans_helper, "~> 0.1.1"}]
+  [{:datatrans_helper, "~> 0.2.0"}]
 end
 ```
 
