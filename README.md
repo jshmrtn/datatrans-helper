@@ -23,7 +23,7 @@ end
 ```elixir
 config :datatrans_helper,
   merchant_id: "Some ID",
-  hmac_key: "Some Key"
+  sign1_hmac_key: "Some Key"
 ```
 
 ## Documentation

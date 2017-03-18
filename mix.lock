@@ -13,6 +13,7 @@
   "jsx": {:hex, :jsx, "2.8.1", "1453b4eb3615acb3e2cd0a105d27e6761e2ed2e501ac0b390f5bbec497669846", [:mix, :rebar3], []},
   "metrics": {:hex, :metrics, "1.0.1", "25f094dea2cda98213cecc3aeff09e940299d950904393b2a29d191c346a8486", [:rebar3], []},
   "mimerl": {:hex, :mimerl, "1.0.2", "993f9b0e084083405ed8252b99460c4f0563e41729ab42d9074fd5e52439be88", [:rebar3], []},
+  "money": {:hex, :money, "1.2.1", "fdcc7b021b894dbcc2cd0f57d2ccdd2224eced747231337a849424ffaa196b13", [:mix], [{:ecto, "~> 1.0 or ~> 2.0 or ~> 2.1", [hex: :ecto, optional: true]}, {:phoenix_html, "~> 2.0", [hex: :phoenix_html, optional: true]}]},
   "poison": {:hex, :poison, "3.1.0", "d9eb636610e096f86f25d9a46f35a9facac35609a7591b3be3326e99a0484665", [:mix], []},
   "pollution": {:hex, :pollution, "0.9.0", "2d172aeedc444f0fc06a69b03bb6a560fb141bcafcc0c8189c29b10ee6e50893", [:mix], []},
   "quixir": {:hex, :quixir, "0.9.1", "b9a45930f330ba485c1cb976afc9f5ceb14ebbe10faf755e0796bb971396c37c", [:mix], [{:pollution, "~> 0.9", [hex: :pollution, optional: false]}]},
