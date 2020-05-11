@@ -3,15 +3,19 @@ defmodule DatatransHelper do
   Small Helper Function to sign Datatrans Request Parameters
   """
 
-  @type signature :: String.t
+  @type signature :: String.t()
   @type amount :: non_neg_integer
-  @type merchant_id :: String.t
-  @type currency :: String.t
-  @type reference_number :: String.t
+  @type merchant_id :: String.t()
+  @type currency :: String.t()
+  @type reference_number :: String.t()
   @type upp_transaction_id :: non_neg_integer
-  @type datatrans_payment_request :: %{merchant_id: merchant_id, amount: amount,
-                                       currency: currency, refno: reference_number,
-                                       sign: signature}
+  @type datatrans_payment_request :: %{
+          merchant_id: merchant_id,
+          amount: amount,
+          currency: currency,
+          refno: reference_number,
+          sign: signature
+        }
 
   @doc """
   Generate signature of a Datatrans Request Parameters
@@ -27,14 +31,15 @@ defmodule DatatransHelper do
   @spec generate_sign1(amount, currency, reference_number) :: signature
   def generate_sign1(amount, currency, reference) when amount > 0 do
     :sha256
-    |> :crypto.hmac(get_sign1_hmac_key(),
+    |> :crypto.hmac(
+      get_sign1_hmac_key(),
       get_merchant_id() <>
-      Integer.to_string(amount) <>
-      currency <>
-      reference
+        Integer.to_string(amount) <>
+        currency <>
+        reference
     )
-    |> Base.encode16
-    |> String.downcase
+    |> Base.encode16()
+    |> String.downcase()
   end
 
   if Code.ensure_compiled?(Money) do
@@ -51,7 +56,7 @@ defmodule DatatransHelper do
         "1dbf3321ef16b02a638762bc30aa9811ce696656ea49e362a452166020c976c5"
 
     """
-    @spec generate_sign1(Money.t, reference_number) :: signature
+    @spec generate_sign1(Money.t(), reference_number) :: signature
     def generate_sign1(%Money{amount: amount, currency: currency}, reference) when amount > 0 do
       generate_sign1(amount, Atom.to_string(currency), reference)
     end
@@ -75,7 +80,7 @@ defmodule DatatransHelper do
   """
   @spec valid_sign1?(signature, amount, currency, reference_number) :: boolean
   def valid_sign1?(sign1, amount, currency, reference) do
-     sign1 == generate_sign1(amount, currency, reference)
+    sign1 == generate_sign1(amount, currency, reference)
   end
 
   if Code.ensure_compiled?(Money) do
@@ -97,7 +102,7 @@ defmodule DatatransHelper do
         false
 
     """
-    @spec valid_sign1?(signature, Money.t, reference_number) :: boolean
+    @spec valid_sign1?(signature, Money.t(), reference_number) :: boolean
     def valid_sign1?(sign1, %Money{amount: amount, currency: currency}, reference) do
       valid_sign1?(sign1, amount, Atom.to_string(currency), reference)
     end
@@ -116,14 +121,15 @@ defmodule DatatransHelper do
   @spec generate_sign2(amount, currency, upp_transaction_id) :: signature
   def generate_sign2(amount, currency, upp_transaction_id) when amount > 0 do
     :sha256
-    |> :crypto.hmac(get_sign2_hmac_key(),
+    |> :crypto.hmac(
+      get_sign2_hmac_key(),
       get_merchant_id() <>
-      Integer.to_string(amount) <>
-      currency <>
-      Integer.to_string(upp_transaction_id)
+        Integer.to_string(amount) <>
+        currency <>
+        Integer.to_string(upp_transaction_id)
     )
-    |> Base.encode16
-    |> String.downcase
+    |> Base.encode16()
+    |> String.downcase()
   end
 
   if Code.ensure_compiled?(Money) do
@@ -140,8 +146,9 @@ defmodule DatatransHelper do
         "8037d669282680ed81f510b41b0622b7ce17e644fef620baf6494146313e2269"
 
     """
-    @spec generate_sign2(Money.t, upp_transaction_id) :: signature
-    def generate_sign2(%Money{amount: amount, currency: currency}, upp_transaction_id) when amount > 0 do
+    @spec generate_sign2(Money.t(), upp_transaction_id) :: signature
+    def generate_sign2(%Money{amount: amount, currency: currency}, upp_transaction_id)
+        when amount > 0 do
       generate_sign2(amount, Atom.to_string(currency), upp_transaction_id)
     end
   end
@@ -186,7 +193,7 @@ defmodule DatatransHelper do
         false
 
     """
-    @spec valid_sign2?(signature, Money.t, upp_transaction_id) :: boolean
+    @spec valid_sign2?(signature, Money.t(), upp_transaction_id) :: boolean
     def valid_sign2?(sign2, %Money{amount: amount, currency: currency}, upp_transaction_id) do
       valid_sign2?(sign2, amount, Atom.to_string(currency), upp_transaction_id)
     end
@@ -232,31 +239,32 @@ defmodule DatatransHelper do
          sign: "1dbf3321ef16b02a638762bc30aa9811ce696656ea49e362a452166020c976c5"}
 
     """
-    @spec generate_payment_info(Money.t, reference_number) :: datatrans_payment_request
+    @spec generate_payment_info(Money.t(), reference_number) :: datatrans_payment_request
     def generate_payment_info(%Money{amount: amount, currency: currency}, reference) do
       generate_payment_info(amount, Atom.to_string(currency), reference)
     end
   end
 
-  @spec get_sign1_hmac_key() :: String.t
+  @spec get_sign1_hmac_key() :: String.t()
   defp get_sign1_hmac_key do
-     :datatrans_helper
-     |> ConfigExt.fetch_env!(:sign1_hmac_key)
-     |> String.upcase
-     |> Base.decode16!
+    :datatrans_helper
+    |> ConfigExt.fetch_env!(:sign1_hmac_key)
+    |> String.upcase()
+    |> Base.decode16!()
   end
 
-  @spec get_sign2_hmac_key() :: String.t
+  @spec get_sign2_hmac_key() :: String.t()
   defp get_sign2_hmac_key do
-     :datatrans_helper
-     |> ConfigExt.fetch_env!(:sign2_hmac_key)
-     |> String.upcase
-     |> Base.decode16!
+    :datatrans_helper
+    |> ConfigExt.fetch_env!(:sign2_hmac_key)
+    |> String.upcase()
+    |> Base.decode16!()
   end
 
-  @spec get_merchant_id() :: String.t | integer
+  @spec get_merchant_id() :: String.t() | integer
   defp get_merchant_id do
     merchant_id = ConfigExt.fetch_env!(:datatrans_helper, :merchant_id)
+
     if is_integer(merchant_id) do
       Integer.to_string(merchant_id)
     else
