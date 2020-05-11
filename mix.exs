@@ -40,8 +40,8 @@ defmodule DatatransHelper.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:config_ext, "~> 0.3.0"},
-      {:money, "~> 1.2.1", optional: true},
+      {:config_ext, "~> 0.3"},
+      {:money, "~> 1.2", optional: true},
       {:ex_doc, ">= 0.0.0", only: :dev},
       {:inch_ex, only: :docs},
       {:excoveralls, "~> 0.4", only: [:dev, :test]},
